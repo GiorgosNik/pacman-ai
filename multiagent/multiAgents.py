@@ -46,7 +46,6 @@ class ReflexAgent(Agent):
         bestScore = max(scores)
         bestIndices = [index for index in range(len(scores)) if scores[index] == bestScore]
         chosenIndex = random.choice(bestIndices) # Pick randomly among the best
-
         "Add more of your code here if you want to"
 
         return legalMoves[chosenIndex]
@@ -76,18 +75,22 @@ class ReflexAgent(Agent):
         foodDistance=fieldSize+1
         newGhostStates = successorGameState.getGhostStates()
         newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
-        for node in newFood.asList():
-            if newFood[node[0]][node[1]] and manhattanDistance(newPos,node)<foodDistance :
-                foodDistance=manhattanDistance(newPos,node)
-        score=score+fieldSize-foodDistance
-        maxGhost=fieldSize
-        for ghost in newGhostStates:
-            pos=ghost.getPosition()
-            if manhattanDistance(newPos,pos)<maxGhost:
-                maxGhost=manhattanDistance(newPos,node)
-        score=score+maxGhost*2
-
-
+        scaredTimer=min(newScaredTimes)
+        if newPos in currentGameState.getCapsules():
+            score=score+1000
+        elif currentGameState.getFood()[newPos[0]][newPos[1]]:
+            score=score+100
+        else:
+            for node in newFood.asList():
+                if newFood[node[0]][node[1]] and manhattanDistance(newPos, node) < foodDistance:
+                    foodDistance = manhattanDistance(newPos, node) - 2
+            score = score - foodDistance
+        for ghost in successorGameState.getGhostPositions():
+            if manhattanDistance(ghost, newPos)<=3:
+                if scaredTimer>manhattanDistance(ghost, newPos):
+                    score=score+1000
+                else:
+                    score=-10000+manhattanDistance(ghost, newPos)*100
 
         return score
 
