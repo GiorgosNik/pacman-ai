@@ -155,6 +155,22 @@ class MinimaxAgent(MultiAgentSearchAgent):
         "*** YOUR CODE HERE ***"
         util.raiseNotDefined()
 
+        def MAX_VALUE(self, gameState, action):
+            if gameState.isWin() or gameState.isLose():
+                return self.evalutationFunction(gameState)
+            else:
+                v=-1000000
+                actions=gameState.getLegalActions(0)
+                for action in actions:
+                    v=max(v,MIN_VALUE(self.evaluationFunction(gameState.generateSuccessor(0,action))))
+                return v
+        def MIN_VALUE(self, gamestate, action):
+            if gameState.isWin() or gameState.isLose():
+                return self.evaluationFunction(gameState)
+            else:
+                v=100000
+                actions=gameState.getLegalActions(0)
+                
 class AlphaBetaAgent(MultiAgentSearchAgent):
     """
     Your minimax agent with alpha-beta pruning (question 3)
