@@ -130,27 +130,23 @@ class MinimaxAgent(MultiAgentSearchAgent):
     """
 
     def MAX_VALUE(self, gameState,Depth):
-        bool_win = gameState.isWin()
-        bool_lose = gameState.isLose()
-        if bool_win !=0 or bool_lose !=0 or Depth==self.depth:
+        if gameState.isWin() or gameState.isLose() or Depth==self.depth:
             return self.evaluationFunction(gameState)
         else:
             v = -1000000
             actions = gameState.getLegalActions(0)
             for action in actions:
-                v = max(v, self.MIN_VALUE(gameState.generateSuccessor(0, action),Depth+1))
+                v = max(v, self.MIN_VALUE(gameState.generateSuccessor(0, action),Depth))
             return v
 
     def MIN_VALUE(self, gameState,Depth):
-        bool_win=gameState.isWin()
-        bool_lose=gameState.isLose()
-        if bool_win!=0 or bool_lose!=0 or Depth==self.depth:
+        if gameState.isWin() or gameState.isLose() :
             return self.evaluationFunction(gameState)
         else:
             v = 100000
             actions = gameState.getLegalActions(0)
             for action in actions:
-                v = min(v, self.MAX_VALUE(gameState.generateSuccessor(0, action),Depth))
+                v = min(v, self.MAX_VALUE(gameState.generateSuccessor(0, action),Depth+1))
             return v
 
     def getAction(self, gameState):
@@ -181,9 +177,11 @@ class MinimaxAgent(MultiAgentSearchAgent):
         actions=gameState.getLegalActions(0)
         v=-100000000000000
         for action in actions:
-            v=max(v,self.MIN_VALUE(gameState.generateSuccessor(0,action),Deep))
-            if v==self.MIN_VALUE(gameState.generateSuccessor(0,action),Deep):
+            successor=gameState.generateSuccessor(0,action)
+            min=self.MIN_VALUE(successor, Deep)
+            if max(v, min)!=v:
                 selected=action
+                v=min
         return selected
 
 
