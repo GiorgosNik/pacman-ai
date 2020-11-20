@@ -129,6 +129,30 @@ class MinimaxAgent(MultiAgentSearchAgent):
     Your minimax agent (question 2)
     """
 
+    def MAX_VALUE(self, gameState,Depth):
+        bool_win = gameState.isWin()
+        bool_lose = gameState.isLose()
+        if bool_win !=0 or bool_lose !=0 or Depth==self.depth:
+            return self.evaluationFunction(gameState)
+        else:
+            v = -1000000
+            actions = gameState.getLegalActions(0)
+            for action in actions:
+                v = max(v, self.MIN_VALUE(gameState.generateSuccessor(0, action),Depth+1))
+            return v
+
+    def MIN_VALUE(self, gameState,Depth):
+        bool_win=gameState.isWin()
+        bool_lose=gameState.isLose()
+        if bool_win!=0 or bool_lose!=0 or Depth==self.depth:
+            return self.evaluationFunction(gameState)
+        else:
+            v = 100000
+            actions = gameState.getLegalActions(0)
+            for action in actions:
+                v = min(v, self.MAX_VALUE(gameState.generateSuccessor(0, action),Depth))
+            return v
+
     def getAction(self, gameState):
         """
         Returns the minimax action from the current gameState using self.depth
@@ -152,25 +176,18 @@ class MinimaxAgent(MultiAgentSearchAgent):
         gameState.isLose():
         Returns whether or not the game state is a losing state
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
 
-        def MAX_VALUE(self, gameState, action):
-            if gameState.isWin() or gameState.isLose():
-                return self.evalutationFunction(gameState)
-            else:
-                v=-1000000
-                actions=gameState.getLegalActions(0)
-                for action in actions:
-                    v=max(v,MIN_VALUE(self.evaluationFunction(gameState.generateSuccessor(0,action))))
-                return v
-        def MIN_VALUE(self, gamestate, action):
-            if gameState.isWin() or gameState.isLose():
-                return self.evaluationFunction(gameState)
-            else:
-                v=100000
-                actions=gameState.getLegalActions(0)
-                
+        Deep=0
+        actions=gameState.getLegalActions(0)
+        v=-100000000000000
+        for action in actions:
+            v=max(v,self.MIN_VALUE(gameState.generateSuccessor(0,action),Deep))
+            if v==self.MIN_VALUE(gameState.generateSuccessor(0,action),Deep):
+                selected=action
+        return selected
+
+
+
 class AlphaBetaAgent(MultiAgentSearchAgent):
     """
     Your minimax agent with alpha-beta pruning (question 3)
