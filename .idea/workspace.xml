@@ -30,4 +30,10 @@
     </task>
     <servers />
   </component>
+  <component name="WindowStateProjectService">
+    <state x="243" y="430" key="#com.jetbrains.python.refactoring.move.PyMakeFunctionTopLevelDialog" timestamp="1605897935554">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="243" y="430" key="#com.jetbrains.python.refactoring.move.PyMakeFunctionTopLevelDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1605897935554" />
+  </component>
 </project>

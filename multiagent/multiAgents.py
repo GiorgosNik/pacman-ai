@@ -130,7 +130,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
     """
 
     def MAX_VALUE(self, gameState,Depth):
-        if gameState.isWin() or gameState.isLose() or Depth==self.depth:
+        if gameState.isWin() or gameState.isLose() or Depth>self.depth:
             return self.evaluationFunction(gameState)
         else:
             v = -1000000
@@ -140,13 +140,22 @@ class MinimaxAgent(MultiAgentSearchAgent):
             return v
 
     def MIN_VALUE(self, gameState,Depth):
-        if gameState.isWin() or gameState.isLose() :
+        import copy
+        if gameState.isWin() or gameState.isLose() or Depth>self.depth :
             return self.evaluationFunction(gameState)
         else:
             v = 100000
-            actions = gameState.getLegalActions(0)
-            for action in actions:
-                v = min(v, self.MAX_VALUE(gameState.generateSuccessor(0, action),Depth+1))
+            states=[gameState]
+            for index in range(1, gameState.getNumAgents()-1):
+                tempStates=[]
+                for state in states:
+                    actions = state.getLegalActions(index)
+                    for action in actions:
+                        stateToAdd=state.generateSuccessor(index,action)
+                        tempStates.append(stateToAdd)
+                for state in states:
+                    v = min(v, self.MAX_VALUE(state,Depth+1))
+                states=copy.deepcopy(tempStates)
             return v
 
     def getAction(self, gameState):
