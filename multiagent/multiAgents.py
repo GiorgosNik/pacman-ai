@@ -130,7 +130,9 @@ class MinimaxAgent(MultiAgentSearchAgent):
     """
 
     def MAX_VALUE(self, gameState,Depth):
-        if gameState.isWin() or gameState.isLose() or Depth>self.depth:
+        if gameState.isWin() or gameState.isLose() or Depth >self.depth:
+            if Depth==self.depth:
+                print("reached depth")
             return self.evaluationFunction(gameState)
         else:
             v = -1000000
@@ -140,23 +142,39 @@ class MinimaxAgent(MultiAgentSearchAgent):
             return v
 
     def MIN_VALUE(self, gameState,Depth):
+        """print("Min Value")
+        if gameState.isWin():
+            print("Win")
+        if gameState.isLose():
+            print("Lose")
+        if Depth > self.depth:
+            print("Depth")"""
         import copy
-        if gameState.isWin() or gameState.isLose() or Depth>self.depth :
+        if gameState.isWin() or gameState.isLose() :
             return self.evaluationFunction(gameState)
         else:
             v = 100000
             states=[gameState]
-            for index in range(1, gameState.getNumAgents()-1):
+         #   print("num of agents",gameState.getNumAgents())
+            for index in range(1, gameState.getNumAgents()):
+               # print("Index",index)
                 tempStates=[]
+               # print("Num of states",len(states))
                 for state in states:
                     actions = state.getLegalActions(index)
+                   # print("Num of actions:",len(actions))
+                    if len(actions)==0:
+                        stateToAdd = gameState
                     for action in actions:
                         stateToAdd=state.generateSuccessor(index,action)
                         tempStates.append(stateToAdd)
                 for state in states:
                     v = min(v, self.MAX_VALUE(state,Depth+1))
                 states=copy.deepcopy(tempStates)
-            return v
+            if gameState.getNumAgents()==1:
+            #    print("no ghost")
+                return self.MAX_VALUE(gameState,Depth+1)
+            return self.MAX_VALUE(gameState,Depth+1)
 
     def getAction(self, gameState):
         """
