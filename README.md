@@ -1,4 +1,4 @@
-# PACMAN-2
+# Pacman AI
 
 ![](packman.gif)
 
